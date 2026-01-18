@@ -1,0 +1,9 @@
+terraform:
+  workdir: terraform
+  auto_approve: true
+
+ansible:
+  inventory_file: inventory.ini
+  playbook: ansible/site.yml
+  user: ubuntu
+  become: true
