@@ -13,7 +13,6 @@ provider "openstack" {
   auth_url              = "https://keystone.recas.ba.infn.it/v3"
   region                = "RegionOne"
   token                 = var.os_token
-#  domain_name           = "a7fe3e616c584ff882c5899236a905f6"
   tenant_id             = var.os_tenant_id
 
   endpoint_overrides = {
