@@ -1,0 +1,74 @@
+---
+- hosts: dbservers
+  become: true
+  become_user: root
+  vars:
+    postgresql_install_repository: false
+    postgresql_version: "15"
+  pre_tasks:
+    - name: Include tasks for RockyLinux9
+      import_tasks: pre_task_RockyLinux.yml
+      when: ansible_distribution == "Rocky"
+
+    - name: Install Dependencies
+      package:
+        name: 'acl'
+  roles:
+    - galaxyproject.postgresql
+    - role: galaxyproject.postgresql_objects
+      become: true
+      become_user: postgres
+
+- hosts: galaxyservers
+  become: true
+  become_user: root
+  vars:
+    galaxy_root: /home/galaxy/galaxy
+    galaxy_server_dir: /home/galaxy/galaxy/server
+    galaxy_mutable_config_dir: /home/galaxy/galaxy/config
+    galaxy_config_file: /home/galaxy/galaxy/config/galaxy.yml
+  pre_tasks:
+
+    - name: Install RHEL/CentOS/Rocky specific dependencies
+      package:
+        name: ['tmpwatch']
+      when: ansible_os_family == 'RedHat'
+
+    - name: Put SELinux in permissive mode.
+      command: setenforce 0
+      become: yes
+      ignore_errors: yes
+
+    - name: Update ca-certificates
+      yum:
+        name: ca-certificates
+        state: latest
+    
+    - name: Ensure Galaxy user exists
+      user:
+        name: galaxy
+        comment: "Galaxy application user"
+        shell: /bin/bash
+        home: /home/galaxy
+        create_home: yes
+
+
+  roles:
+    #    - galaxyproject.tusd
+    #- usegalaxy_eu.apptainer
+    - galaxyproject.galaxy
+    - role: galaxyproject.miniconda
+      become: true
+      become_user: "{{ galaxy_user_name }}"
+    - galaxyproject.nginx
+    - galaxyproject.gxadmin
+    - galaxyproject.cvmfs
+  post_tasks:
+    - name: Setup gxadmin cleanup task
+      ansible.builtin.cron:
+        name: "Cleanup Old User Data"
+        user: galaxy # Run as the Galaxy user
+        minute: "0"
+        hour: "0"
+        job: "SHELL=/bin/bash source {{ galaxy_venv_dir }}/bin/activate &&  GALAXY_LOG_DIR=/tmp/gxadmin/ GALAXY_ROOT={{ galaxy_root }}/server GALAXY_CONFIG_FILE={{ galaxy_config_file }} /usr/local/bin/gxadmin galaxy cleanup 60"
+
