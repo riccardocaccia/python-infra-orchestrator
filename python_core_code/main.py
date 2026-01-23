@@ -56,7 +56,7 @@ inventory_path = f"{ANSIBLE_DIR}/inventory.ini"
 inventory_template = """
 [webservers]
 {% for node in nodes %}
-{{ node.name }} ansible_host={{ node.ip }} ansible_user=rocky ansible_ssh_private_key_file=~/.ssh/private ansible_ssh_common_args='-o ProxyJump=ubuntu@212.189.205.254 -o StrictHostKeyChecking=no -o ForwardAgent=yes'
+{{ node.name }} ansible_host={{ node.ip }} ansible_user=rocky ansible_ssh_private_key_file=~/.ssh/private ansible_ssh_common_args='-o ProxyJump="ubuntu@212.189.205.254 -i ~/.ssh/private" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 {% endfor %}
 """
 

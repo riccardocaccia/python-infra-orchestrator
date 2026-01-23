@@ -1,0 +1,62 @@
+---
+- name: Python3 build tools are installed -Rocky Linux
+  dnf:
+    name:
+      - python3-pip
+      - python3-setuptools
+      - python3-devel
+    state: present
+
+# Packages installed via pip
+- name: Upgrade pip, setuptools, wheel, and virtualenv
+  pip:
+    name:
+      - pip
+      - setuptools
+      - wheel
+      - virtualenv
+    state: latest
+    executable: pip3
+
+- name: Install Dependencies for Rocky Linux
+  package:
+    name:
+      - acl
+      - bzip2
+      - git
+      - make
+      - gcc
+      - gcc-c++
+      - openssl-devel
+      - bzip2-devel
+      - libffi-devel
+      - zlib-devel
+      - xz-devel
+      - sqlite-devel
+      - wget
+      - tmpwatch
+      - tar
+      - python3-psycopg2
+    state: present
+
+- name: Install Packages for Rocky Linux locales settings
+  dnf:
+    name:
+      - langpacks-en
+      - glibc-all-langpacks
+    state: present
+
+##---------POSTGRESQL COMPATIBILITY ROCKY9-----------------------
+- name: Disable default postgresql module (Rocky 9)
+  shell: dnf -qy module disable postgresql
+
+- name: Import CORRECT PostgreSQL GPG key for RHEL/Rocky
+  rpm_key:
+    state: present
+    key: "https://download.postgresql.org/pub/repos/yum/keys/PGDG-RPM-GPG-KEY-RHEL"
+
+- name: Install PGDG RPM for RHEL/Rocky 9
+  dnf:
+    name: "https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm"
+    state: present
+    disable_gpg_check: yes

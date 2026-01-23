@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 
 router = APIRouter()
+BASE_DIR = Path(__file__).resolve().parent
 
 # --- input token ---
 class DeployRequest(BaseModel):
@@ -27,7 +28,7 @@ def run_orchestrator(os_token: str, job_id: str):
         work_dir.mkdir(exist_ok=True)
 
         # --- Terraform ---
-        TF_DIR = "terraform"
+        TF_DIR = BASE_DIR / "terraform"
         jobs[job_id]["logs"] += "Starting Terraform init...\n"
         subprocess.run(["terraform", "init"], cwd=TF_DIR, check=True)
 
@@ -43,7 +44,7 @@ def run_orchestrator(os_token: str, job_id: str):
         nodes = json.loads(tf_output)
 
         # --- Inventory Ansible ---
-        ANSIBLE_DIR = "ansible"
+        ANSIBLE_DIR = BASE_DIR / "ansible"
         inventory_path = work_dir / "inventory.ini"
 
         inventory_template = """
