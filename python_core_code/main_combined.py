@@ -16,7 +16,7 @@ class OpenStackInputs(BaseModel):
     os_distribution: Optional[str] = None
     os_version: Optional[str] = None
 
-    model_config = {"extra": "ignore"} # extra = "forbid" per lanciare errore qual'ora ci sia un campo che non vogliamo
+    model_config = {"extra": "ignore"} # extra = "forbid" per lanciare errore qualora ci sia un campo che non vogliamo
 
 class AWSInputs(BaseModel):
     instance_type: str
