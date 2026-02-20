@@ -4,6 +4,17 @@ variable "os_token" {
   description = "OpenStack scoped token"
 }
 
+variable "auth_url" {
+  type        = string
+  description = "mmmm"
+}
+
+variable "laniakea_description" {
+  type        = string
+  default     = " "
+  description = "User-defined description for the Laniakea deployment"
+}
+
 variable "os_tenant_id" {
   type        = string
   description = "OpenStack tenant/project ID"

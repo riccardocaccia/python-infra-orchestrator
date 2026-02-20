@@ -10,8 +10,8 @@ terraform {
  
 provider "openstack" {
   
-  auth_url              = "https://keystone.recas.ba.infn.it/v3"
-  region                = "RegionOne"
+  auth_url              = var.auth_url
+  region                = var.region
   token                 = var.os_token
   tenant_id             = var.os_tenant_id
 
@@ -77,6 +77,13 @@ resource "openstack_compute_instance_v2" "galaxy_vm" {
   image_name  	= var.image_name
   flavor_name 	= var.flavor_name
   key_pair    = openstack_compute_keypair_v2.vm_key.name
+
+  metadata = {
+    deploy_reason = var.laniakea_description
+    #owner         = "..."
+    #project       = "..."
+   }
+
   security_groups = [
     "default",
     openstack_networking_secgroup_v2.ssh_internal.name,
@@ -90,6 +97,16 @@ resource "openstack_compute_instance_v2" "galaxy_vm" {
 
   user_data = file("${path.module}/cloudinit.sh")
 }
+
+# Qui aggiungo una vera e propria descrizione come si fa su horizon ma non viene salvata negli state, possibile perdita
+#resource "null_resource" "set_description" {
+#  depends_on = [openstack_compute_instance_v2.galaxy_vm]
+#
+#  provisioner "local-exec" {
+#    command = "openstack server set --description '${var.laniakea_description}' ${openstack_compute_instance_v2.galaxy_vm.id}"
+#  }
+#}
+
 
 output "vm_info" {
   description = "VM info for Ansible inventory"
