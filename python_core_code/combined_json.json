@@ -1,0 +1,63 @@
+{
+  "job_id": "deploy-1",
+  "timestamp": "2026-02-15T18:00:00Z",
+  "description": "prova combined deployment rcaccia",
+
+  "auth": {
+    "aai_token": "aaaaaaa", 
+    "sub": "",
+    "group": "admin"
+  },
+
+  "orchestrator": {
+    "target_provider": "openstack",
+    "desired_orchestrator": "terraform",    
+    "endpoint": "personalized url depending on the orchestrator"
+  },
+
+  "selected_provider": "Openstack",
+
+  "cloud_providers": {
+    "openstack": {
+      "os_auth_url": "https://keystone.recas.ba.infn.it/v3",
+      "os_project_id": "7f4c27e308d143e7b6a61b421173bdb1",
+      "os_region_name": "RegionOne",
+      "private_network_proxy_host": "212.189.205.254",
+      "ssh_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINf3e34J02akCoH4Sa99w4YAQ+4ex8QsvtEiLCgABskR Riccardo Caccia",
+      "template": {
+        "url": "https://github.com/riccardocaccia/laniakea-nebula",
+        "path": "terraform/openstack",
+        "branch": "main"
+      },
+
+      "inputs": {
+        "flavor": "small",
+        "image": "Ubuntu 22.04",
+        "os_distribution": "ubuntu",
+        "os_version": "22.04", 
+        "storage_size": ""
+      }
+    },
+
+    "aws": {
+      "region": "eu-south-1",
+      "bastion_ip": "212.189.205.254/32",
+      "ssh_key": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINf3e34J02akCoH4Sa99w4YAQ+4ex8QsvtEiLCgABskR Riccardo Caccia",
+      "aws_access_key": "",
+      "aws_secret_key": "",
+      "template": {
+        "url": "https://github.com/riccardocaccia/terraform_file_aws",
+        "path": "aws",
+        "branch": "main"
+      },
+
+      "inputs": {
+        "instance_type": "t3.xlarge",
+        "image": "ami-0abcdef1234567890", 
+        "storage_size": "",
+        "os_distribution": "ubuntu",
+        "os_version": "22.04"
+      }
+    }
+  }
+}

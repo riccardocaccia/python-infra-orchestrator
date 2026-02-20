@@ -1,3 +1,5 @@
+# funziona, main.py che prende il json O di aws O di opnstack, non inisieme
+
 import argparse
 import json
 import subprocess
