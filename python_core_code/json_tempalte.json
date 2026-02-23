@@ -1,0 +1,89 @@
+{
+  "deployment_uuid": "deploy-1",
+  "timestamp": "2026-02-15T18:00:00Z",
+  "description": "prova combined deployment rcaccia",
+
+  "auth": {
+    "aai_token": "aaaaaaa",
+    "sub": "",
+    "group": "admin"
+  },
+
+  "orchestrator": {
+    "target_provider": "openstack",
+    "desired_orchestrator": "terraform",
+    "endpoint": "personalized url depending on the orchestrator"
+  },
+
+  "selected_provider": "AWS",
+
+  "cloud_providers": {
+    "openstack": {
+      "os_auth_url": "",
+      "os_project_id": "",
+      "os_region_name": "",
+      "private_network_proxy_host": "",
+      "ssh_key": "",
+      "template": {
+        "url": "https://github.com/riccardocaccia/laniakea-nebula",
+        "path": "terraform/openstack",
+        "branch": "main"
+      },
+
+      "inputs": {
+        "flavor": "small",
+        "image": "Ubuntu 22.04",
+        "os_distribution": "ubuntu",
+        "os_version": "22.04",
+        "storage_size": "",
+        "open_ports": [
+         {
+          "port": 22,
+          "protocol": "tcp",
+          "cidr": ""
+          },
+         {
+          "port": 4000,
+          "protocol": "tcp",
+          "cidr": "0.0.0.0/0"
+         }
+        ]
+
+      }
+    },
+
+    "aws": {
+      "region": "eu-south-1",
+      "bastion_ip": "",
+      "ssh_key": "",
+      "aws_access_key": "",
+      "aws_secret_key": "",
+      "template": {
+        "url": "https://github.com/riccardocaccia/terraform_file_aws",
+        "path": "aws",
+        "branch": "main"
+      },
+
+      "inputs": {
+        "instance_type": "t3.xlarge",
+        "image": "ami-0abcdef1234567890",
+        "storage_size": "",
+        "os_distribution": "ubuntu",
+        "os_version": "22.04",
+              "open_ports": [
+         {
+          "port": 22,
+          "protocol": "tcp",
+          "cidr": ""
+          },
+         {
+          "port": 80,
+          "protocol": "tcp",
+          "cidr": "0.0.0.0/0"
+         }
+        ]
+
+      }
+    }
+  }
+}
